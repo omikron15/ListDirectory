@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ListDirectory</string>
+    <string name="title_activity_query_menu">QueryMenu</string>
+</resources>

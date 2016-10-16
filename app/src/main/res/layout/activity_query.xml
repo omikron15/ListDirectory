@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.listdirectory.QueryActivity">
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DB Connect"
+        android:onClick="DBConnection"
+        android:id="@+id/button" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/button"
+        android:text="System:"
+        android:id="@+id/Text1"
+        android:paddingRight="5dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/Text1"
+        android:text=" "
+        android:id="@+id/Text2"
+        android:paddingRight="5dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Run Query"
+        android:onClick="RunQuery"
+        android:id="@+id/RunButton"
+        android:layout_toRightOf="@id/Text2"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close Query"
+        android:onClick="CloseQuery"
+        android:id="@+id/CloseQueryButton"
+        android:layout_toRightOf="@id/RunButton"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Text1"
+        android:layout_toRightOf="@id/button"
+        android:text="System Type:"
+        android:id="@+id/Text3"
+        android:paddingRight="5dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Text1"
+        android:layout_toRightOf="@id/Text3"
+        android:text=" "
+        android:id="@+id/Text4"
+        android:paddingRight="5dp"
+        />
+
+
+
+    <ListView
+        android:id="@+id/InputListView"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button"
+        />
+
+    <ListView
+        android:id="@+id/OutputListView"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button"
+        android:layout_toRightOf="@id/InputListView"
+        />
+
+    <ListView
+        android:id="@+id/RelationshipListView"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button"
+        android:layout_toRightOf="@id/OutputListView"
+        />
+
+</RelativeLayout>
