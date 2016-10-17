@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,39 +23,55 @@ import java.io.File;
 public class ResultsActivity extends AppCompatActivity {
 
 
-    String Query_String;
+    String Input_Query_String;
+    String Output_Query_String;
+    String Relationship_Query_String;
+
+    //Declares String object for databse path
     String DB_PATH;
 
     //Declares SQLite db object
     SQLiteDatabase db;
 
-    Cursor Results;
+    Cursor Input_Results;
+    Cursor Output_Results;
+    Cursor Relationship_Results;
+
+    LinearLayout name3;
+    TableLayout table;
+
+    TableRow tr_head;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        table = (TableLayout) findViewById(R.id.TableLayout);
 
         Intent intent_Results = getIntent();
         //Retrieve db file from query activity
 
         DB_PATH = intent_Results.getStringExtra("DB_PATH");
-       // Query_String = intent_Results.getStringExtra("Query_String");
-        Query_String = "SELECT * FROM INPUTS";
+        Input_Query_String = intent_Results.getStringExtra("Input_Query_String");
+        Output_Query_String = intent_Results.getStringExtra("Output_Query_String");
+        Relationship_Query_String = intent_Results.getStringExtra("Relationship_Query_String");
+
+        //Query_String = "SELECT * FROM INPUTS";
         db = SQLiteDatabase.openDatabase(DB_PATH, null, 1);
 
-       Results = db.rawQuery(Query_String, null);
-        Results.moveToFirst();
+        Input_Results = db.rawQuery(Input_Query_String, null);
+        Input_Results.moveToFirst();
 
-        //Now results in the cursor. we need to  ge this displayed in a grid view.
+        Output_Results = db.rawQuery(Output_Query_String, null);
+        Output_Results.moveToFirst();
+
+        Relationship_Results = db.rawQuery(Relationship_Query_String, null);
+        Relationship_Results.moveToFirst();
 
 
-       // String test1 = Results.getString(Results.getColumnIndex("ID")) ;
-       // Results.moveToNext();
-       // String test2 = Results.getString(Results.getColumnIndex("ID")) ; ;
-       // String test3 ;
-       // String test4 ;
+
+
 
 
     }
@@ -61,90 +79,96 @@ public class ResultsActivity extends AppCompatActivity {
     public void ShowInputs(final View view){
 
 
-        String test1 = Results.getString(Results.getColumnIndex("ID"));
+        if (table != null){
+            table.removeAllViews();
+        }
+        ShowData(view, Input_Results);
 
-
-        Toast.makeText(getBaseContext(), test1, Toast.LENGTH_LONG).show();
-        Results.moveToNext();
     }
 
     public void ShowOutputs(final View view){
 
-        Toast.makeText(getBaseContext(), "Outputs", Toast.LENGTH_LONG).show();
+
+        if (table != null){
+            table.removeAllViews();
+        }
+        ShowData(view, Output_Results);
+
+
     }
 
     public void ShowRelationships(final View view){
 
-        Toast.makeText(getBaseContext(), "Relationships", Toast.LENGTH_LONG).show();
+        if (table != null){
+            table.removeAllViews();
+        }
+        ShowData(view, Relationship_Results);
+
     }
 
-    public void AddText(final View view){
+    public void ShowData(View view, Cursor Incursor){
 
-        //code should alter the results row object to have any many textviews as there are collums in the query result.
-        LinearLayout name3 = (LinearLayout) findViewById(R.id.ResultRowLayout);
-        //ResultsText
-        //TextView text = (TextView) findViewById(R.id.ResultsText);
-        TableLayout table = (TableLayout) findViewById(R.id.TableLayout);
+        Cursor cursor = Incursor;
 
+        //TableLayout table = (TableLayout) findViewById(R.id.TableLayout);
 
+        tr_head = new TableRow(this);
 
-        TableRow tr_head = new TableRow(this);
-
-        for (int x =0; x < Results.getColumnCount(); x++){
+        for (int x =0; x < cursor.getColumnCount(); x++){
 
             TextView temp = new TextView(this);
             temp.setId(x);
             temp.setPadding(10, 10, 10, 10);
             temp.setTextSize(15);
-            temp.setText(Results.getColumnName(x));
+            temp.setBackgroundColor(Color.GRAY);
+            temp.setTypeface(null, Typeface.BOLD);
+
+            GradientDrawable gd = new GradientDrawable();
+            gd.setCornerRadius(0);
+            gd.setStroke(1, 0xFF000000);
+            temp.setBackground(gd);
+
+            temp.setText(cursor.getColumnName(x));
             tr_head.addView(temp);
         }
 
         table.addView(tr_head);
 
-        Results.moveToFirst();
+        cursor.moveToFirst();
 
+        for (int y =0; y < cursor.getCount(); y++) {
 
+            TableRow tr_data = new TableRow(this);
 
-        //for (int x =0; x < Results.getCount(); x++) {
-            for (int y =0; y < Results.getCount(); y++) {
-
-                TableRow tr_data = new TableRow(this);
-
-            //for (int z = 1; (z < Results.getColumnCount()-1); z++) {
-            for (int z = 1; (z < Results.getColumnCount()); z++) {
-
-
+            for (int z = 0; (z < cursor.getColumnCount()); z++) {
 
                 TextView temp2 = new TextView(this);
                 temp2.setPadding(10, 10, 10, 10);
                 temp2.setTextSize(15);
-                temp2.setText(Results.getString(Results.getColumnIndex(Results.getColumnName(z))));
+
+                GradientDrawable gd2 = new GradientDrawable();
+                gd2.setCornerRadius(0);
+                gd2.setStroke(1, 0xFF000000);
+                temp2.setBackground(gd2);
+
+                temp2.setText(cursor.getString(cursor.getColumnIndex(cursor.getColumnName(z))));
                 tr_data.addView(temp2);
 
 
             }
-                table.addView(tr_data);
-                Results.moveToNext();
-           //String test1 = Results.getString(Results.getColumnIndex("ID"));
-
-
+            table.addView(tr_data);
+            cursor.moveToNext();
 
         }
 
+    }//end of showdata method
 
-
-
-
-
-
-    }
 
     public void Close(final View view){
 
         super.finish();
 
-    }
+    }//end of close method
 
 
 

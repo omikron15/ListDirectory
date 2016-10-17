@@ -81,6 +81,11 @@ public class QueryActivity extends AppCompatActivity {
 
     //adapter required for versions ?
 
+    //Declare String object to hold input query string
+    String Input_Query_String;
+    String Output_Query_String;
+    String Relationship_Query_String;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +163,7 @@ public class QueryActivity extends AppCompatActivity {
 
                 Input_Fields = new QueryItem(Input_Cursor.getColumnNames(),Input_Query);
                 Output_Fields = new QueryItem(Output_Cursor.getColumnNames(),Output_Query);
-                Relationship_Fields = new QueryItem(Input_Cursor.getColumnNames(),Relationship_Query);
+                Relationship_Fields = new QueryItem(Relationship_Cursor.getColumnNames(),Relationship_Query);
 
                 //
                 Versions_Fields = Versions_Cursor.getColumnNames();
@@ -231,7 +236,7 @@ public class QueryActivity extends AppCompatActivity {
                         //code to change adapter value for field 2 should go in here?
 
                         Input_Fields.Query_String[position] = (userinput.getText()).toString();
-
+                        Input_Fields.changeNumber ++;
                         // Inputs_Field_adapter.notifyDataSetChanged();
 
 
@@ -279,7 +284,7 @@ public class QueryActivity extends AppCompatActivity {
                         //code to change adapter value for field 2 should go in here?
 
                         Output_Fields.Query_String[position] = (userinput.getText()).toString();
-
+                        Output_Fields.changeNumber ++;
                         // Inputs_Field_adapter.notifyDataSetChanged();
 
 
@@ -327,6 +332,7 @@ public class QueryActivity extends AppCompatActivity {
                         //code to change adapter value for field 2 should go in here?
 
                         Relationship_Fields.Query_String[position] = (userinput.getText()).toString();
+                        Relationship_Fields.changeNumber ++;
 
                         // Inputs_Field_adapter.notifyDataSetChanged();
 
@@ -352,8 +358,6 @@ public class QueryActivity extends AppCompatActivity {
 
         });
 
-
-
     } //end of DB connect function
 
     //return to main activity
@@ -367,36 +371,20 @@ public class QueryActivity extends AppCompatActivity {
     public void RunQuery(final View view){
 
 
-     //   String Query_String = "SELECT * FROM INPUTS WHERE ";
-
-
-
-
-
-
-       // Query_String = Query_String + (Input_Fields.Field_Names[3]) + " = '" + (Input_Fields.Query_String[3]) +"'; ";
-
-        String Query_String = "SELECT * FROM Inputs WHERE ";
-
-        boolean isfirst = true;
-
-     for(int i=0; i<Input_Fields.getCount(); i++){
-
-            if (Input_Fields.Query_String[i] != null ){
-
-                if (isfirst != true){
-                    Query_String = Query_String + "AND ";
-                    Query_String = Query_String + Input_Fields.Field_Names[i] + " ='" + Input_Fields.Query_String[i].trim() + "' ";
-                }else {
-                    Query_String = Query_String + Input_Fields.Field_Names[i] + " ='" + Input_Fields.Query_String[i].trim() + "' ";
-                    isfirst = false;
-                }
+        Input_Query_String = "SELECT * FROM INPUTS";
+            if(Input_Fields.hasQuery()) {
+                Input_Query_String = CreateQuery(Input_Query_String, Input_Fields);
             }
 
-        }
+        Output_Query_String = "SELECT * FROM OUTPUTS";
+            if(Output_Fields.hasQuery()) {
+                Output_Query_String = CreateQuery(Output_Query_String, Output_Fields);
+            }
 
-
-
+        Relationship_Query_String = "SELECT * FROM RELATIONSHIP";
+            if(Relationship_Fields.hasQuery()) {
+                Relationship_Query_String = CreateQuery(Relationship_Query_String, Relationship_Fields);
+            }
 
         //code to open Results activity
 
@@ -405,21 +393,37 @@ public class QueryActivity extends AppCompatActivity {
 
         //db_File variable is set up to be passed to the Results activity
         intent_Results.putExtra("DB_PATH", DB_PATH);
-        intent_Results.putExtra("Query_String", Query_String);
-
-
-
-
+        intent_Results.putExtra("Input_Query_String", Input_Query_String);
+        intent_Results.putExtra("Output_Query_String", Output_Query_String);
+        intent_Results.putExtra("Relationship_Query_String", Relationship_Query_String);
 
         //The Query Activity is started/called
         startActivity(intent_Results);
-
-
     }
 
+    public String CreateQuery(String Qstring, QueryItem Qitem ){
 
+        String dataString = Qstring;
+        QueryItem item = Qitem;
+        boolean isfirst = true;
 
+        for(int i=0; i<item.getCount(); i++){
 
+            if (item.Query_String[i] != null ){
 
+                if (isfirst != true){
+                        dataString = dataString + "AND ";
+                        dataString = dataString + item.Field_Names[i] + " ='" + item.Query_String[i].trim() + "' ";
+                    }else {
+                        dataString = dataString + " WHERE " + item.Field_Names[i] + " ='" + item.Query_String[i].trim() + "' ";
+                        isfirst = false;
+                    }
+            }
+
+        }
+
+        return dataString;
+
+    }//end of createQuery method
 
 } //end of class
