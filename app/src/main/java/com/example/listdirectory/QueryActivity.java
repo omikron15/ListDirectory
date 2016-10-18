@@ -31,14 +31,17 @@ public class QueryActivity extends AppCompatActivity {
 
     //Declares String variable which will be used to store the location of the DB file of the current
     String DB_PATH = null;
-    //
+
+    //Declares String variable which specifies CERES project diretory on SD card. This value is obtained from the main activity.
     String CERES_Directory;
-    //
+
+    //Declares String variable which specifies the selected project. This value is obtained from the main activity.
     String selected_Project;
-    //
+
+    //Declares Int variable which specifies the system type. This value is obtained from the main activity.
     int System_Type;
 
-    //
+    //Declares file object for the database file
     File db_File;
 
     //Declares SQLite db object
@@ -56,30 +59,21 @@ public class QueryActivity extends AppCompatActivity {
     Cursor Relationship_Cursor;
     Cursor Versions_Cursor;
 
-    //Declares String Arrays to hold field names for each table
-
-    //string inputs field commetned out for experiment with queryItem
-    //String[] Input_Fields;
+    //Declares queryItem objects for each table
     QueryItem Input_Fields;
-
-
     QueryItem Output_Fields;
     QueryItem Relationship_Fields;
 
+    //// TODO: Variables for versions table will be required for versions actviity so can be altered later
+    //Declares String Array to hold field names for versions table
     String[] Versions_Fields;
-
-    //Declares String arrays to hold query Strings
-    //String[] Input_Query;
-
-    //Declares array adapters used to populate list views with field names from relevant tables
     //Dont think a versions one is required but should revisit later?
     // ArrayAdapter Inputs_Field_adapter;
 
+    //Declares custom addapters used to populate listviews with custom QueryItem objects
     customAdapter Inputs_Field_adapter;
     customAdapter Output_Field_adapter;
     customAdapter Relationship_Field_adapter;
-
-    //adapter required for versions ?
 
     //Declare String object to hold input query string
     String Input_Query_String;
@@ -102,8 +96,6 @@ public class QueryActivity extends AppCompatActivity {
         TextView text2 = (TextView) findViewById(R.id.Text2);
         TextView text4 = (TextView) findViewById(R.id.Text4);
 
-
-
         //DB_Path is set to point at current projects DB file.
         //This is made up of the the CERES directory + the selected project + the DB file name
         //The DB file name should always be the name of the project with the extension .db
@@ -118,7 +110,7 @@ public class QueryActivity extends AppCompatActivity {
             text4.setText("F&G");
         }
 
-    }
+    }//end of on Create method
 
     public void DBConnection(final View view) {
 
@@ -135,28 +127,19 @@ public class QueryActivity extends AppCompatActivity {
             //possibly due to insufficient permissions in manifest
             //read only access is all that this app requires
             db = SQLiteDatabase.openDatabase(DB_PATH, null, 1);
-            Toast.makeText(getBaseContext(), "Connected!", Toast.LENGTH_LONG).show();
+
+            Toast.makeText(getBaseContext(), "Database connection established!", Toast.LENGTH_LONG).show();
 
             //Functions here to split depending on if system ESD or F&G
             //Flag parameter to be obtained from main activity.
 
             if(System_Type == 0 || System_Type == 1  )  {
 
-
                 //Loads cursors with all data from ESD Tables
                 Input_Cursor = db.rawQuery("SELECT * FROM INPUTS", null);
                 Output_Cursor = db.rawQuery("SELECT * FROM OUTPUTS", null);
                 Relationship_Cursor = db.rawQuery("SELECT * FROM RELATIONSHIP", null);
-                Versions_Cursor = db.rawQuery("SELECT * FROM Versions", null);
 
-                //Input_Fields = Input_Cursor.getColumnNames();
-
-                //attempt 1
-                //Input_Fields.Field_Names = Input_Cursor.getColumnNames();
-
-                //for (int i = 0; i < (Input_Cursor.getCount() -1); i++ ){
-                //     Input_Query[i] = " ";
-                //}
                 String[] Input_Query = new String[Input_Cursor.getCount()];
                 String[] Output_Query = new String[Output_Cursor.getCount()];
                 String[] Relationship_Query = new String[Relationship_Cursor.getCount()];
@@ -165,16 +148,8 @@ public class QueryActivity extends AppCompatActivity {
                 Output_Fields = new QueryItem(Output_Cursor.getColumnNames(),Output_Query);
                 Relationship_Fields = new QueryItem(Relationship_Cursor.getColumnNames(),Relationship_Query);
 
-                //
-                Versions_Fields = Versions_Cursor.getColumnNames();
-
-                //Working display code
-                //Inputs_Field_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Input_Fields);
-                //InputListView.setAdapter(Inputs_Field_adapter);
-
                 Inputs_Field_adapter = new customAdapter(this, Input_Fields);
                 InputListView.setAdapter(Inputs_Field_adapter);
-
 
                 Output_Field_adapter = new customAdapter(this, Output_Fields);
                 OutputListView.setAdapter(Output_Field_adapter);
@@ -183,28 +158,6 @@ public class QueryActivity extends AppCompatActivity {
                 RelationshipListView.setAdapter(Relationship_Field_adapter);
 
                 Toast.makeText(getBaseContext(), "ESD Fields", Toast.LENGTH_LONG).show();
-
-
-
-            }else if(System_Type == 1){
-                //F&G function is possibly no longer required?
-                //now that fire area and fire zones are not going to be included as tables to be queried
-                //FAG_Load();
-
-
-
-               //Inputs_Field_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Input_Fields);
-               //InputListView.setAdapter(Inputs_Field_adapter);
-
-               // Output_Field_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Output_Fields);
-                //OutputListView.setAdapter(Output_Field_adapter);
-
-                //Relationship_Field_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Relationship_Fields);
-               // RelationshipListView.setAdapter(Relationship_Field_adapter);
-
-
-               // Toast.makeText(getBaseContext(), "F&G Fields", Toast.LENGTH_LONG).show();
-
             }
 
         }else{
@@ -413,9 +366,9 @@ public class QueryActivity extends AppCompatActivity {
 
                 if (isfirst != true){
                         dataString = dataString + "AND ";
-                        dataString = dataString + item.Field_Names[i] + " ='" + item.Query_String[i].trim() + "' ";
+                        dataString = dataString + item.Field_Names[i] + " LIKE'" + item.Query_String[i].trim() + "' ";
                     }else {
-                        dataString = dataString + " WHERE " + item.Field_Names[i] + " ='" + item.Query_String[i].trim() + "' ";
+                        dataString = dataString + " WHERE " + item.Field_Names[i] + " LIKE'" + item.Query_String[i].trim() + "' ";
                         isfirst = false;
                     }
             }

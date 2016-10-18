@@ -57,7 +57,14 @@ public class ResultsActivity extends AppCompatActivity {
         Output_Query_String = intent_Results.getStringExtra("Output_Query_String");
         Relationship_Query_String = intent_Results.getStringExtra("Relationship_Query_String");
 
-        //Query_String = "SELECT * FROM INPUTS";
+
+        //Line can be used to overwrite InputQueryString for testing only.
+        //Line should be commented out when using the app properly
+        //Input_Query_String = "SELECT * FROM INPUTS";
+
+        //Input_Query_String = "select * from inputs where ID like '%1%'";
+
+
         db = SQLiteDatabase.openDatabase(DB_PATH, null, 1);
 
         Input_Results = db.rawQuery(Input_Query_String, null);

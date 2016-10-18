@@ -36,6 +36,16 @@
         android:layout_toRightOf="@id/ShowOutputsButton"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Note: % is used for wildcards when searching"
+        android:paddingLeft="15dp"
+        android:layout_toRightOf="@id/ShowRelationshipsButton"
+        android:paddingTop="5dp"
+        android:textSize="13pt"
+        />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +54,6 @@
         android:id="@+id/CloseButton"
         android:layout_alignParentRight="true"
         />
-
 
 
     <ScrollView
