@@ -47,6 +47,16 @@
         android:layout_below="@+id/Button2"
         />
 
+        <Button
+            android:id="@+id/VersionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="Version"
+            android:onClick="VersionMenu"
+            android:layout_below="@+id/Button4"
+            />
+
     </RelativeLayout>
 
 

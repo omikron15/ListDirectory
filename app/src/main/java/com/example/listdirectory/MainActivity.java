@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         final Button button2 = (Button) findViewById(R.id.Button2);
         final Button button3 = (Button) findViewById(R.id.Button3);
         final Button button4 = (Button) findViewById(R.id.Button4);
+        final Button VersionButton = (Button) findViewById(R.id.VersionButton);
 
         //Creates file object using CERES location.
         //Will be used to verify that the pathway exists (i.e. that the CERES folder exists)
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 //Buttons 3 and 4 are made invisible. This removes chances of errors if the user has already loaded a project.
                 button2.setVisibility(view.VISIBLE);
                 button3.setVisibility(view.INVISIBLE);
+                VersionButton.setVisibility(view.INVISIBLE);
                 ListView2.setVisibility(view.INVISIBLE);
 
                 //check to ensure that system type has been defined by evaluating Systems_Type_Error
@@ -157,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
                     button4.setVisibility(view.INVISIBLE);
                 }else{
                     button4.setVisibility(view.VISIBLE);
+                    VersionButton.setVisibility(view.VISIBLE);
+
                 }
 
 
@@ -238,6 +242,24 @@ public class MainActivity extends AppCompatActivity {
 
         //The Query Activity is started/called
         startActivity(intent_Query);
+
+
+    }//End of query Menu method
+
+    public void VersionMenu(final View view) {
+
+        //New intent created to open the query activity
+        Intent intent_Version = new Intent(this, VersionActivity.class);
+
+        //CERES directory variable is set up to be passed to the Query activity
+        intent_Version.putExtra("Directory", CERES_Directory);
+
+        //The selected project variable is set up to be passed to the Query activity
+        intent_Version.putExtra("Project", selected_Project);
+
+
+        //The Query Activity is started/called
+        startActivity(intent_Version);
 
 
     }//End of query Menu method

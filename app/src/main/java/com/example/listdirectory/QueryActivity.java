@@ -57,7 +57,7 @@ public class QueryActivity extends AppCompatActivity {
     Cursor Input_Cursor;
     Cursor Output_Cursor;
     Cursor Relationship_Cursor;
-    Cursor Versions_Cursor;
+
 
     //Declares queryItem objects for each table
     QueryItem Input_Fields;
