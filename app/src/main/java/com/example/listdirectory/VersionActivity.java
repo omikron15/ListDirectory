@@ -3,6 +3,9 @@ package com.example.listdirectory;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -41,6 +46,11 @@ public class VersionActivity extends AppCompatActivity {
     String[] DrawingNumber;
     String[] SheetNumber;
     String[] Combined;
+
+    TableRow tr_head;
+
+    Cursor VersionQuery;
+    String VersionQueryString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,13 +111,13 @@ public class VersionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Cursor VersionQuery;
-                String VersionQueryString;
 
                 VersionQueryString = "SELECT DrawingNo, SheetNo, Revision, Details, Drawnby, Checkedby, RevDate FROM VERSIONS WHERE DrawingNo like '" + DrawingNumber[position].trim() + "' AND SheetNo like'" + SheetNumber[position].trim() + "'";
 
 
                 VersionQuery = db.rawQuery(VersionQueryString, null);
+
+                Toast.makeText(getBaseContext(), Combined[position], Toast.LENGTH_LONG).show();
 
 
             }//end of on item click method
@@ -116,6 +126,63 @@ public class VersionActivity extends AppCompatActivity {
 
 
     }//end of ShowDrawings method
+
+    public void ShowRevisions(final View view) {
+
+        if (table != null){
+            table.removeAllViews();
+        }
+
+        tr_head = new TableRow(this);
+
+        for (int x =0; x < VersionQuery.getColumnCount(); x++){
+
+            TextView temp = new TextView(this);
+            temp.setId(x);
+            temp.setPadding(10, 10, 10, 10);
+            temp.setTextSize(15);
+            temp.setBackgroundColor(Color.GRAY);
+            temp.setTypeface(null, Typeface.BOLD);
+
+            GradientDrawable gd = new GradientDrawable();
+            gd.setCornerRadius(0);
+            gd.setStroke(1, 0xFF000000);
+            temp.setBackground(gd);
+
+            temp.setText(VersionQuery.getColumnName(x));
+            tr_head.addView(temp);
+        }
+
+        table.addView(tr_head);
+
+        VersionQuery.moveToFirst();
+
+        for (int y =0; y < VersionQuery.getCount(); y++) {
+
+            TableRow tr_data = new TableRow(this);
+
+            for (int z = 0; (z < VersionQuery.getColumnCount()); z++) {
+
+                TextView temp2 = new TextView(this);
+                temp2.setPadding(10, 10, 10, 10);
+                temp2.setTextSize(15);
+
+                GradientDrawable gd2 = new GradientDrawable();
+                gd2.setCornerRadius(0);
+                gd2.setStroke(1, 0xFF000000);
+                temp2.setBackground(gd2);
+
+                temp2.setText(VersionQuery.getString(VersionQuery.getColumnIndex(VersionQuery.getColumnName(z))));
+                tr_data.addView(temp2);
+
+
+            }
+            table.addView(tr_data);
+            VersionQuery.moveToNext();
+
+        }
+
+    }//end of showRevisions method
 
 
 }//end of activity

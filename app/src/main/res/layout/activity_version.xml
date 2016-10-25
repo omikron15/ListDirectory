@@ -15,12 +15,27 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Show Drawings"
         android:id="@+id/ShowDrawingsButton"
         android:onClick="ShowDrawings"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Revisions"
+            android:id="@+id/ShowRevisionsButton"
+            android:onClick="ShowRevisions"
+            />
+
+        </LinearLayout>
 
     <ListView
         android:id="@+id/DrawingView"
