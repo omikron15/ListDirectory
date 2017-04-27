@@ -215,7 +215,8 @@ public class MainActivity extends AppCompatActivity {
         //Sets target to the selected C&E and specifies the type as PDF
         target.setDataAndType(Uri.fromFile(CE_File), "application/pdf");
 
-        //Unsure on purpose
+
+
         target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
         //Creates intent for displaying PDF application options
@@ -248,17 +249,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void VersionMenu(final View view) {
 
-        //New intent created to open the query activity
+        //New intent created to open the version activity
         Intent intent_Version = new Intent(this, VersionActivity.class);
 
-        //CERES directory variable is set up to be passed to the Query activity
+        //CERES directory variable is set up to be passed to the version activity
         intent_Version.putExtra("Directory", CERES_Directory);
 
-        //The selected project variable is set up to be passed to the Query activity
+        //The selected project variable is set up to be passed to the version activity
         intent_Version.putExtra("Project", selected_Project);
 
 
-        //The Query Activity is started/called
+        //The version Activity is started/called
         startActivity(intent_Version);
 
 

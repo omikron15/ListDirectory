@@ -85,7 +85,6 @@ public class ResultsActivity extends AppCompatActivity {
 
     public void ShowInputs(final View view){
 
-
         if (table != null){
             table.removeAllViews();
         }
@@ -116,8 +115,6 @@ public class ResultsActivity extends AppCompatActivity {
     public void ShowData(View view, Cursor Incursor){
 
         Cursor cursor = Incursor;
-
-        //TableLayout table = (TableLayout) findViewById(R.id.TableLayout);
 
         tr_head = new TableRow(this);
 

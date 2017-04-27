@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -36,6 +37,8 @@ public class VersionActivity extends AppCompatActivity {
 
     TableLayout table;
     ListView listview;
+    TableRow tr_head;
+    Button RevisionButton;
 
     String DB_PATH;
 
@@ -47,7 +50,7 @@ public class VersionActivity extends AppCompatActivity {
     String[] SheetNumber;
     String[] Combined;
 
-    TableRow tr_head;
+
 
     Cursor VersionQuery;
     String VersionQueryString;
@@ -70,6 +73,7 @@ public class VersionActivity extends AppCompatActivity {
 
         listview = (ListView) findViewById(R.id.DrawingView);
         table = (TableLayout) findViewById(R.id.VersionTable);
+        RevisionButton = (Button) findViewById(R.id.ShowRevisionsButton);
 
         //ListView ListView1 = (ListView) findViewById(R.id.ListView1);
         DB_PATH = CERES_Directory + "/" + Selected_Project + "/" + Selected_Project + ".db";
@@ -118,6 +122,8 @@ public class VersionActivity extends AppCompatActivity {
                 VersionQuery = db.rawQuery(VersionQueryString, null);
 
                 Toast.makeText(getBaseContext(), Combined[position], Toast.LENGTH_LONG).show();
+
+                RevisionButton.setVisibility(View.VISIBLE);
 
 
             }//end of on item click method
@@ -184,5 +190,10 @@ public class VersionActivity extends AppCompatActivity {
 
     }//end of showRevisions method
 
+    public void CloseVersions(final View view) {
+
+        super.finish();
+
+    }
 
 }//end of activity

@@ -30,6 +30,4 @@ public class QueryItem {
             return true;
         }
     }
-
-
 }
